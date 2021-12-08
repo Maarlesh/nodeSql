@@ -20,10 +20,15 @@ var server = http.createServer(function(req,res){
             if (err) throw err;
             con.query("SELECT * FROM student", function (err, result, fields) {
               if (err) throw err;
-             // res.write(result);
+              for(i=0;i<result.length;i++){
+                  var row = result[i];
+                  console.log(row.name);
+                  res.write(row.name+"");
+              }
+              res.end();
               console.log(result);
             });
-          });       
+          });  
     }
     if(req.url.includes("/insert")){
         makeConnection();
@@ -37,8 +42,10 @@ var server = http.createServer(function(req,res){
             con.query(sql, function (err, result) {
               if (err) throw err;
               console.log("1 record inserted");
+              res.end();
             });
           });
+
     }
     if(req.url.includes("/update")){
         makeConnection();
@@ -52,7 +59,9 @@ var server = http.createServer(function(req,res){
               if (err) throw err;
               console.log(result.affectedRows + " record(s) updated");
             });
-          });          
+          });  
+         // res.end();
+        
     }
     if(req.url.includes("/delete")){
         makeConnection();
@@ -66,9 +75,10 @@ var server = http.createServer(function(req,res){
                 console.log("no of rows deleted:"+result.affectedRows);
             })
             res.write("delete successful");
+           // res.end();
         });
     }
-    res.end();
+   // res.end();
 })
 server.listen(5000);
 console.log("server running on port 5000");
